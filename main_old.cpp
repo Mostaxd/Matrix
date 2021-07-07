@@ -38,9 +38,9 @@ int main(int argc, char* argv[])
 
     std::vector<std::vector<double>> ArrayD =
     {
-        {9,3,4,7},
-        {4,3,4,8},
-        {1,1,1,3}
+        {1,2,3,10},
+        {4,5,6,10},
+
 
     };
 
@@ -80,7 +80,7 @@ int main(int argc, char* argv[])
     Matrix<int> m_b(3, 3, ArrayB);
 
     Matrix<double> m_c(3, 2, ArrayC);
-    Matrix<double> m_d(3, 4, ArrayD);
+    Matrix<double> m_d(2, 4, ArrayD);
 
     Matrix<int> m_e(3, 3, ArrayE);
     Matrix<int> m_f(3, 3, ArrayF);
@@ -104,8 +104,18 @@ int main(int argc, char* argv[])
     cout << "MatrixD * MatrixC: \n" << m_c * m_d << endl; //Working matrix multiplication
 
     cout << "complex matrixG:" << endl << m_g << endl;
+    // this doesn't work yet:
+   // cout << "gaussian_elemination of MatrixD:" << endl << m_d.gaussian_elemination() << endl; 
 
-    cout << "gaussian_elemination of MatrixD:" << endl << m_d.solve() << endl;
-
+    
+   //example of the new () operator:
+    cout << "Matrix e: \n";
+    cout << m_e;
+    cout << "accessing elemnts one by one: \n";
+    cout << m_e(0,0) << " " << m_e(0,1) << " " << m_e(0,2) << endl;
+    cout << "changing an element manually: \n";
+    m_e(0,0) = 10;
+    cout << m_e;
+    
     return 0;
 }

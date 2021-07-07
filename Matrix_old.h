@@ -1,16 +1,16 @@
 #ifndef MATRIX
 #define MATRIX
-
 #include <iostream>
 #include <cstdlib>
 #include <cmath>
 #include <vector>
+#include <array>
 #include <typeinfo>
 #include <complex>
 
 using std::complex;
 
-template  <typename T>
+template  <class T>
 class Matrix
 {
 private:
@@ -18,8 +18,6 @@ private:
 	int rows; // number of rows
 	int size; // array size
 	T* data; // Element array
-	// member of child class lgs
-	std::vector<T> x;
 
 
 public:
@@ -38,11 +36,12 @@ public:
 
 
 	Matrix<T> gaussian_elemination();
-	Matrix<T>& substitute();
-	Matrix<T> solve();
+	T* substitute();
 
 
-	T& operator()(int row, int col);
+
+
+    T& operator()(int row, int col);
 	template  <typename ElemType>
 	friend Matrix<ElemType>   operator +(const Matrix<ElemType>& matrix1, const Matrix<ElemType>& matrix2); // Matrix and matrix addition (+ operator overload)
 	template  <typename ElemType>
@@ -72,7 +71,7 @@ public:
 };
 
 // Default constructor
-template  <typename T>
+template  <class T>
 Matrix<T>::Matrix()
 {
 	cols = 0;
@@ -82,7 +81,7 @@ Matrix<T>::Matrix()
 }
 
 // This is one of the main constructors that 1- creates a matrix 2-fills it with values (USED in * operations!!)
-template  <typename T>
+template  <class T>
 Matrix<T>::Matrix(int rows, int cols, T val)
 {
 	this -> cols = cols;
@@ -93,21 +92,20 @@ Matrix<T>::Matrix(int rows, int cols, T val)
 
 
 
-
-
-
 // constructor to generate empty matrix with initializeation.
-template <typename T>
+template <class T>
 Matrix<T>::Matrix(int rows, int cols){
 	this -> cols = cols;
 	this -> rows = rows;
 	size = cols * rows;
 	data = new T[size];
+	for (int i = 0; i < size; i++)
+		data[i] = 0;
 }
 
 
 // Constructor: consists of a two-dimensional array  -----   Main Constructor!
-template  <typename T>
+template  <class T>
 Matrix<T>::Matrix(int rows_, int cols_, const std::vector<std::vector<T>>& Array)
 {
 	cols = cols_;
@@ -120,7 +118,7 @@ Matrix<T>::Matrix(int rows_, int cols_, const std::vector<std::vector<T>>& Array
 }
 
 // Constructor: constructed by the class
-template  <typename T>
+template  <class T>
 Matrix<T>::Matrix(const Matrix& matrix)
 {
 	cols = matrix.cols;
@@ -143,7 +141,7 @@ std::ostream& operator<<(std::ostream& os, const Matrix<ElemType>& matrix)
 		{
 			os << matrix.data[j * matrix.rows + i];
 			if (j != matrix.cols - 1)
-				os << " , ";
+				os << ",";
 		}
 		os << ";" << std::endl;
 	}
@@ -274,7 +272,7 @@ Matrix<ElemType>  operator*(const Matrix<ElemType>& matrix1, const Matrix<ElemTy
 
 
 
-// Operator+ overload (Skalar-Addieren)
+// Operator+ overload (Skalar-Addieren) (1)
 template  <typename ElemType>
 Matrix<ElemType>  operator+(const Matrix<ElemType>& matrix, const ElemType value)
 {   float res = static_cast<double>(value);
@@ -282,6 +280,16 @@ Matrix<ElemType>  operator+(const Matrix<ElemType>& matrix, const ElemType value
 		matrix.data[i] += res;
 	return matrix;
 }
+
+
+// Operator+ overload (Skalar-Addieren) (2)
+ template  <typename ElemType>
+ Matrix<ElemType>  operator+(const ElemType value, const Matrix<ElemType>& matrix)
+ {
+	 return matrix+value;
+ }
+
+
 // Operator* overload (Skalar-Multiplizieren) (1)
 template  <typename ElemType>
 Matrix<ElemType>  operator*(const Matrix<ElemType>& matrix, const ElemType value)
@@ -297,15 +305,7 @@ Matrix<ElemType>  operator*(const ElemType value, const Matrix<ElemType>& matrix
       return matrix * value;
 }
 
-// duplicate
-// Operator* overload (Skalar-Multiplizieren)
-// template  <typename ElemType>
-// Matrix<ElemType>  operator*(const Matrix<ElemType>& matrix, const ElemType value)
-// {   float res = static_cast<double>(value);
-// 	for (int i = 0; i < matrix.size; i++)
-// 		matrix.data[i] *= res;
-// 	return matrix;
-// }
+
 
 // Operator/ overload (Matrix division by number)
 template  <typename ElemType>
@@ -321,7 +321,7 @@ Matrix<ElemType>  operator/(const Matrix<ElemType>& matrix, const ElemType value
 
 
 
-template <typename T>
+template <class T>
 Matrix<T> Matrix<T>::gaussian_elemination(){
 	// need at least cols-1 rows to perform successful elimination
 	if (rows < cols -1){ return *this;}
@@ -337,59 +337,37 @@ Matrix<T> Matrix<T>::gaussian_elemination(){
 
 	for (int i = 0; i < rows; i++){
 		for (int j = 0; j < cols; j++){
-			lgs[i][j] = data[j * rows + i];		// implicit typecast
+			lgs[i][j] = data[i * rows + j];		// implicit typecast
 		}
 	}
 
 	double divisor;
-	for (int latest_row = 0; latest_row < rows; latest_row++){		//latest row == latest column <-- diagonal
-		for (int i = latest_row + 1; i < rows; i++){
-			divisor = lgs[i][latest_row] / lgs[latest_row][latest_row];
+	// why is i = 1? --> first row stays same -- start with second :)
+	for (int i = 1; i < rows; i++){
+		divisor = lgs[i][i-1] / lgs[i-1][i-1];
+		// why is j = i-1?  building a diagonal matrix --> value at [i][i] = 0
+		for (int j = i-1; j < cols; j++){
+			lgs[i][j] /= divisor;
+			lgs[i][j] -= lgs[i-1][j];
 
-			for (int j = latest_row; j < cols; j++){
-				lgs[i][j] /= divisor;
-				lgs[i][j] -= lgs[latest_row][j];
-			}
 		}
-
 	}
 
+
 	Matrix<double> lgs_matrix(rows, cols, lgs);
+
 	return lgs_matrix;
 }
 
-// solve for x1 x2 x3 ... xn
-template <typename T>
-Matrix<T>& Matrix<T>::substitute(){
-	int i, j;
-	i = 0;
- 	// std::vector<T> x;
-	x.reserve(cols-1);
-	while ( cols-1 >= i++) x.push_back(1);
-	rows = cols - 1;
-	T sum = 0;
-	for (i = rows; i >= 0; i--){
-		for (j = cols-1; j <= i; j++){
-			sum+= data[ (cols - 1 - j) * rows + i] * x[cols - 1 - i];
-			// std::cout << "data[cols * rows + i] = " << data[cols * rows +i] << " divisor sum = " << sum << std::endl;
-		}
-		// std::cout << "rows: " << cols -1 << std::endl;
-		// cols - 1 = number of interesting rows  -- using cols-1 just in case rows is not set properly
-		std::cout << "cell value: " << data[(cols-1) * (cols-1) - (i*(cols-1))] << std::endl;
-		x[cols - 1 -i] = data[cols * rows + i] / sum;
-	}
-	// this -> x = x;
-	// just testing...
-	std::cout << "lgs solutions: " << this -> x[cols-1] << " , " << this -> x[cols - 2] << "..." << std::endl;
-	return *this;
+template <class T>
+T* Matrix<T>::substitute(){
+
 }
 
-
-
-template <typename T>
-Matrix<T> Matrix<T>::solve(){
-	// nice chaining :)
-	return this->gaussian_elemination().substitute();
+template <class T>
+T* solve(const Matrix<T>& matrix){
+	// should work but still need to test this
+	return matrix.gaussian_elemination().substitute();
 }
 
 #endif
