@@ -368,19 +368,32 @@ Matrix<T>& Matrix<T>::substitute(){
 	while ( cols-1 >= i++) x.push_back(1);
 	rows = cols - 1;
 	T sum = 0;
-	for (i = rows; i >= 0; i--){
-		for (j = cols-1; j <= i; j++){
-			sum+= data[ (cols - 1 - j) * rows + i] * x[cols - 1 - i];
-			// std::cout << "data[cols * rows + i] = " << data[cols * rows +i] << " divisor sum = " << sum << std::endl;
+
+	// why i = rows - 1?
+	// counting starts at 0 -- rows is number of rows  --> if there is one row start at rows-1
+	for (i = rows -1 ; i >= 0; i--){
+		for (j = cols - 2; j >= i; j--){
+			sum += (data[j * rows + i] * x[j]);
+
+			// std::cout << "factor to mutliply cell value with (x[j]): " << x[j] << " at j: " << j << std::endl;
+			// std::cout << "cell value: " << data[j * rows + i] << " sum: " << sum << std::endl;
+
 		}
 		// std::cout << "rows: " << cols -1 << std::endl;
 		// cols - 1 = number of interesting rows  -- using cols-1 just in case rows is not set properly
-		std::cout << "cell value: " << data[(cols-1) * (cols-1) - (i*(cols-1))] << std::endl;
-		x[cols - 1 -i] = data[cols * rows + i] / sum;
+		// std::cout << "cell value: " << data[(cols-1) * (cols-1) - (i*(cols-1))] << std::endl;
+		// std::cout << "cell value: " << data[(rows)*i + i] << std::endl;
+
+		x[i] = data[ (cols - 1) * rows + i] / sum;
+		// std::cout << "value at last column: " << data[ (cols - 1) * rows + i] << std::endl;
+		// std::cout << "value of i: " << i << std::endl;
+		// std::cout << "solution of x[i]: " << x[i] << std::endl;
+		// std::cout << "reset sum. sum = 0 -------------" << std::endl;
+		sum = 0;
 	}
 	// this -> x = x;
 	// just testing...
-	std::cout << "lgs solutions: " << this -> x[cols-1] << " , " << this -> x[cols - 2] << "..." << std::endl;
+	std::cout << "lgs solutions: x1 " << x[0] << " , " << x[1] << " , " << x[2] << std::endl;
 	return *this;
 }
 
