@@ -1,3 +1,4 @@
+
 #ifndef MATRIX
 #define MATRIX
 
@@ -29,7 +30,7 @@ public:
 	Matrix(int rows_, int cols_, const std::vector<std::vector<T>>& Array); // A Two-dimensional array to construct a matrix
 	Matrix(const Matrix& matrix);                      // Use an existing matrix object to construct a matrix
 
-	~Matrix() { delete[]data; }; //deconstructor (deletes arrays after usage, emptying memory)
+	~Matrix() { delete[]data; }; //deconstructor (deletes arrays after usage, manually emptying heap memory)
 
 
 	int  getCols() const { return cols; };                 // Get the number of columns
@@ -63,18 +64,33 @@ public:
 	friend Matrix<ElemType>   operator *(const Matrix<ElemType>& matrix, const ElemType value);       // Matrix and number multiplication * operator overload (1)
 	template  <typename ElemType>
 	friend Matrix<ElemType>   operator *(const ElemType value, const Matrix<ElemType>& matrix);       // Matrix and number multiplication * operator overload (2)
-   	template  <typename ElemType>
-	friend Matrix<ElemType>   operator /(const Matrix<ElemType>& matrix, const ElemType value);       // Matrix and number division/operator overload (1)
-	template  <typename ElemType>
-	friend Matrix<ElemType>   operator +(const Matrix<ElemType>& matrix, const ElemType value);       // Matrix and number addition + operator overloading (1)
-	template  <typename ElemType>
-	friend Matrix<ElemType>   operator -(const Matrix<ElemType>& matrix, const ElemType value);       // Matrix and number addition + operator overloading (1)
+
+	//much much cleaner and easyer to read -- this bugged me a long time
+	// we need to simplify every operator overload like this!
+	Matrix<T>&   operator/(const T value);       // Matrix and number division/operator overload (1)
+	// template  <typename ElemType>
+	// friend Matrix<ElemType>   operator +(const Matrix<ElemType>& matrix, const ElemType value);       // Matrix and number addition + operator overloading (1)
+	// template  <typename ElemType>
+	// friend Matrix<ElemType>   operator -(const Matrix<ElemType>& matrix, const ElemType value);       // Matrix and number addition + operator overloading (1)
 };
+
+
+
+
+
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+// class member initialization
 
 // Default constructor
 template  <typename T>
 Matrix<T>::Matrix()
 {
+	std::cout << "Matrix constructor without paramerters called" << std::endl;
 	cols = 0;
 	rows = 0;
 	size = 0;
@@ -240,7 +256,7 @@ Matrix<ElemType>  operator*(const Matrix<ElemType>& matrix1, const Matrix<ElemTy
 
 	 if (matrix1.cols != matrix2.rows) {
 	 	std::cerr << "Fehler:Die Spalten von Matrix1 sind nicht gleich den Zeilen von Matrix2, \
-		und können nicht multipliziert werden.(matrix::operator*)" << std::endl;
+und können nicht multipliziert werden.(matrix::operator*)" << std::endl;
 	 	return res;
 	 }
 
@@ -273,15 +289,20 @@ Matrix<ElemType>  operator*(const Matrix<ElemType>& matrix1, const Matrix<ElemTy
 
 
 
+// this is adding the same scalar to every element in a matrix
+// which is not adding an adding a scalar to a matrix operation
+// to do that you would need to multiply a identity matrix with the scalar and then do matrix + matrix addition
+// which would only permit adding a scalar to square matrices
+// nevertheless i strongly think this wasn't requested and we shouldn't implement it
+// // Operator+ overload (Skalar-Addieren)
+// template  <typename ElemType>
+// Matrix<ElemType>  operator+(const Matrix<ElemType>& matrix, const ElemType value)
+// {   float res = static_cast<double>(value);
+// 	for (int i = 0; i < matrix.size; i++)
+// 		matrix.data[i] += res;
+// 	return matrix;
+// }
 
-// Operator+ overload (Skalar-Addieren)
-template  <typename ElemType>
-Matrix<ElemType>  operator+(const Matrix<ElemType>& matrix, const ElemType value)
-{   float res = static_cast<double>(value);
-	for (int i = 0; i < matrix.size; i++)
-		matrix.data[i] += res;
-	return matrix;
-}
 // Operator* overload (Skalar-Multiplizieren) (1)
 template  <typename ElemType>
 Matrix<ElemType>  operator*(const Matrix<ElemType>& matrix, const ElemType value)
@@ -297,23 +318,14 @@ Matrix<ElemType>  operator*(const ElemType value, const Matrix<ElemType>& matrix
       return matrix * value;
 }
 
-// duplicate
-// Operator* overload (Skalar-Multiplizieren)
-// template  <typename ElemType>
-// Matrix<ElemType>  operator*(const Matrix<ElemType>& matrix, const ElemType value)
-// {   float res = static_cast<double>(value);
-// 	for (int i = 0; i < matrix.size; i++)
-// 		matrix.data[i] *= res;
-// 	return matrix;
-// }
 
 // Operator/ overload (Matrix division by number)
-template  <typename ElemType>
-Matrix<ElemType>  operator/(const Matrix<ElemType>& matrix, const ElemType value)
+template  <typename T>
+Matrix<T>& Matrix<T>::operator/(const T value)
 {
-	for (int i = 0; i < matrix.size; i++)
-		matrix.data[i] /= value;
-	return matrix;
+	for (int i = 0; i < size; i++)
+		data[i] /= value;
+	return this;
 }
 
 
@@ -404,5 +416,29 @@ Matrix<T> Matrix<T>::solve(){
 	// nice chaining :)
 	return this->gaussian_elemination().substitute();
 }
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+// new class: Lgs
+////////////////////////////////////////////////////////////////////////////////
+template <typename T>
+class Lgs : public Matrix<T>{
+private:
+	T* x;
+public:
+	Lgs();
+	Lgs<T>& test();
+};
+
+
+////////////////////////////////////////////////////////////////////////////////
+/// lgs constructors
+template <typename T>
+Lgs<T>::Lgs(){
+	x = nullptr;
+
+}
+
 
 #endif

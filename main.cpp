@@ -8,8 +8,8 @@ using std::cout;
 using std::endl;
 using std::complex;
 
-
-int main(int argc, char* argv[])
+// we don't need command line arguments in this program
+int main()
 {
 
 
@@ -107,5 +107,10 @@ int main(int argc, char* argv[])
 
     cout << "gaussian_elemination of MatrixD:" << endl << m_d.solve() << endl;
 
+
+
+    // lgs testing:
+    Lgs<int> lgs1;
+    cout << "matrix of lgs1: " << lgs1 << endl;
     return 0;
 }
