@@ -112,5 +112,10 @@ int main()
 
     cout << "complex matrixG:" << endl << m_g << endl;
 
-    m_d.gauss();
+    //m_d.gauss();
+    
+   Matrix<double> mat(3,4);
+   std::cin>>mat;
+
+   mat.gauss();
 }
