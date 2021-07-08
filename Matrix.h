@@ -1,15 +1,15 @@
-
 #ifndef MATRIX
 #define MATRIX
-
 #include <iostream>
 #include <cstdlib>
 #include <cmath>
 #include <vector>
 #include <typeinfo>
 #include <complex>
-
+#include<iomanip>
+//using namespace std;
 using std::complex;
+using std::vector;
 
 template  <typename T>
 class Matrix
@@ -20,14 +20,14 @@ private:
 	int size; // array size
 	T* data; // Element array
 	// member of child class lgs
-	std::vector<T> x;
+	vector<T> x;
 
 
 public:
 	Matrix(); // Default constructor
 	Matrix(int rows_, int cols_, T val); // constructor that fills matrix with val
 	Matrix(int rows_, int cols_);	//empty constructor initialized with 0
-	Matrix(int rows_, int cols_, const std::vector<std::vector<T>>& Array); // A Two-dimensional array to construct a matrix
+	Matrix(int rows_, int cols_, const vector<vector<T>>& Array); // A Two-dimensional array to construct a matrix
 	Matrix(const Matrix& matrix);                      // Use an existing matrix object to construct a matrix
 
 	~Matrix() { delete[]data; }; //deconstructor (deletes arrays after usage, manually emptying heap memory)
@@ -41,7 +41,7 @@ public:
 	Matrix<T> gaussian_elemination();
 	Matrix<T>& substitute();
 	Matrix<T> solve();
-
+    Matrix<T>& gauss();
 
 	T& operator()(int row, int col);
 	template  <typename ElemType>
@@ -105,6 +105,9 @@ Matrix<T>::Matrix(int rows, int cols, T val)
 	this -> rows = rows;
 	size = cols * rows;
 	data = new T[size];
+
+	for (int i = 0; i < size; i++)
+		data[i] = val;
 }
 
 
@@ -124,7 +127,7 @@ Matrix<T>::Matrix(int rows, int cols){
 
 // Constructor: consists of a two-dimensional array  -----   Main Constructor!
 template  <typename T>
-Matrix<T>::Matrix(int rows_, int cols_, const std::vector<std::vector<T>>& Array)
+Matrix<T>::Matrix(int rows_, int cols_, const vector<vector<T>>& Array)
 {
 	cols = cols_;
 	rows = rows_;
@@ -328,117 +331,66 @@ Matrix<T>& Matrix<T>::operator/(const T value)
 	return this;
 }
 
-
-
-
-
-
 template <typename T>
-Matrix<T> Matrix<T>::gaussian_elemination(){
-	// need at least cols-1 rows to perform successful elimination
-	if (rows < cols -1){ return *this;}
+Matrix<T>& Matrix<T>::gauss()
+{
+    std::cout<< "initial matrix: \n";
+    std::cout << *this;
 
-	// very likely not an integer --- conversion to double needed!
-	// obviously not working with complex and fractions
-	// copy int / float  matrix to double matrix would be much cleaner
-	// cleaner way needs different constructor but since we use templates it would interfere with existing one
-	std::vector<std::vector<double>> lgs;
-	// set expected dimensions so we dont have to use vector.push_back() to add new element
-	lgs.reserve(rows);
-	for ( int i = 0; i < rows; i++) lgs[i].reserve(cols);
+    int n,i,j,k;
+    Matrix<T> mat(rows, cols);
+    n = rows;
 
-	for (int i = 0; i < rows; i++){
-		for (int j = 0; j < cols; j++){
-			lgs[i][j] = data[j * rows + i];		// implicit typecast
-		}
-	}
+    for (int i = 0; i < cols; i++)
+		for (int j = 0; j < rows; j++)
+			{mat(j,i) = data[i * rows + j];}   //put data of matrix in an array;
 
-	double divisor;
-	for (int latest_row = 0; latest_row < rows; latest_row++){		//latest row == latest column <-- diagonal
-		for (int i = latest_row + 1; i < rows; i++){
-			divisor = lgs[i][latest_row] / lgs[latest_row][latest_row];
+    for (i=0;i<n;i++)                    //Pivotisation
+        for (k=i+1;k<n;k++)
+            if (abs(mat(i,i))<abs(mat(k,i)))
+                for (j=0;j<=n;j++)
+                {
+                    double temp=mat(i,j);
+                    mat(i,j)=mat (k,j);
+                    mat(k,j)=temp;
+                }
+    std::cout<<"\nThe matrix after Pivotisation is:\n";
+    std::cout << mat;
+    for (i=0;i<n-1;i++)            //loop to perform the gauss elimination
+        for (k=i+1;k<n;k++)
+            {
+                double t=mat(k,i)/mat(i,i);
+                for (j=0;j<=n;j++)
+                    mat(k,j)=mat(k,j)-t*mat(i,j);    //make the elements below the pivot elements equal to zero or elimnate the variables
+            }
+             std::cout<<"\n\nThe matrix after gauss-elimination is as follows:\n";
+    std::cout << mat;
+    float lsg[n];
+    for (i=n-1;i>=0;i--)                //back-substitution
+    {                        //x is an array whose values correspond to the values of x,y,z..
+        lsg[i] = mat(i,n);                //make the variable to be calculated equal to the rhs of the last equation
+        for (j=i+1;j<n;j++)
+            if (j!=i)            //then subtract all the lhs values except the coefficient of the variable whose value                                   is being calculated
+                lsg[i]=lsg[i]-mat(i,j)*lsg[j];
+        lsg[i]=lsg[i]/mat(i,i);            //now finally divide the rhs by the coefficient of the variable to be calculated
+    }
+    std::cout<<"\nThe values of the variables are as follows:\n";
+    for (i=0;i<n;i++)
+    {
+        std::cout<<lsg[i]<<std::endl;
+    }
 
-			for (int j = latest_row; j < cols; j++){
-				lgs[i][j] /= divisor;
-				lgs[i][j] -= lgs[latest_row][j];
-			}
-		}
 
-	}
+        return *this;
 
-	Matrix<double> lgs_matrix(rows, cols, lgs);
-	return lgs_matrix;
-}
 
-// solve for x1 x2 x3 ... xn
-template <typename T>
-Matrix<T>& Matrix<T>::substitute(){
-	int i, j;
-	i = 0;
- 	// std::vector<T> x;
-	x.reserve(cols-1);
-	while ( cols-1 >= i++) x.push_back(1);
-	rows = cols - 1;
-	T sum = 0;
 
-	// why i = rows - 1?
-	// counting starts at 0 -- rows is number of rows  --> if there is one row start at rows-1
-	for (i = rows -1 ; i >= 0; i--){
-		for (j = cols - 2; j >= i; j--){
-			sum += (data[j * rows + i] * x[j]);
-
-			// std::cout << "factor to mutliply cell value with (x[j]): " << x[j] << " at j: " << j << std::endl;
-			// std::cout << "cell value: " << data[j * rows + i] << " sum: " << sum << std::endl;
-
-		}
-		// std::cout << "rows: " << cols -1 << std::endl;
-		// cols - 1 = number of interesting rows  -- using cols-1 just in case rows is not set properly
-		// std::cout << "cell value: " << data[(cols-1) * (cols-1) - (i*(cols-1))] << std::endl;
-		// std::cout << "cell value: " << data[(rows)*i + i] << std::endl;
-
-		x[i] = data[ (cols - 1) * rows + i] / sum;
-		// std::cout << "value at last column: " << data[ (cols - 1) * rows + i] << std::endl;
-		// std::cout << "value of i: " << i << std::endl;
-		// std::cout << "solution of x[i]: " << x[i] << std::endl;
-		// std::cout << "reset sum. sum = 0 -------------" << std::endl;
-		sum = 0;
-	}
-	// this -> x = x;
-	// just testing...
-	std::cout << "lgs solutions: x1 " << x[0] << " , " << x[1] << " , " << x[2] << std::endl;
-	return *this;
 }
 
 
 
-template <typename T>
-Matrix<T> Matrix<T>::solve(){
-	// nice chaining :)
-	return this->gaussian_elemination().substitute();
-}
 
 
-
-////////////////////////////////////////////////////////////////////////////////
-// new class: Lgs
-////////////////////////////////////////////////////////////////////////////////
-template <typename T>
-class Lgs : public Matrix<T>{
-private:
-	T* x;
-public:
-	Lgs();
-	Lgs<T>& test();
-};
-
-
-////////////////////////////////////////////////////////////////////////////////
-/// lgs constructors
-template <typename T>
-Lgs<T>::Lgs(){
-	x = nullptr;
-
-}
 
 
 #endif
