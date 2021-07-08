@@ -38,9 +38,9 @@ int main()
 
     std::vector<std::vector<double>> ArrayD =
     {
-        {9,3,4,7},
-        {4,3,4,8},
-        {1,1,1,3}
+        {1,-2,1,0},
+        {2,1,-3,5},
+        {4,-7,1,-1}
 
     };
 
@@ -105,12 +105,5 @@ int main()
 
     cout << "complex matrixG:" << endl << m_g << endl;
 
-    cout << "gaussian_elemination of MatrixD:" << endl << m_d.solve() << endl;
-
-
-
-    // lgs testing:
-    Lgs<int> lgs1;
-    cout << "matrix of lgs1: " << lgs1 << endl;
-    return 0;
+    m_d.gauss();
 }
