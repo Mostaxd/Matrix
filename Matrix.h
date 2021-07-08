@@ -19,8 +19,6 @@ private:
 	int rows; // number of rows
 	int size; // array size
 	T* data; // Element array
-	// member of child class lgs
-	vector<T> x;
 
 
 public:
@@ -37,10 +35,10 @@ public:
 	int  getRows() const { return rows; };                 // Get the number of rows
 	int  getSize() const { return rows * cols; };          // Get the size of the array of Matrix
 
-
-	Matrix<T> gaussian_elemination();
-	Matrix<T>& substitute();
-	Matrix<T> solve();
+	// we don't need those no more i suppose
+	// Matrix<T> gaussian_elemination();
+	// Matrix<T>& substitute();
+	// Matrix<T> solve();
     Matrix<T>& gauss();
 
 	T& operator()(int row, int col);

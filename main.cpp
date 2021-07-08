@@ -62,13 +62,20 @@ int main()
     complex<float> c2(22.2, -2);
     complex<float> c3(-1.125,3.8);
     complex<float> c4(-1.25, -1.25);
-
+    complex<float> c5(12, 2);
+    complex<float> c6(-2, 4);
+    complex<float> c7(1, 0);
+    complex<float> c8(6, -1);;
+    complex<float> c9(1,1);
+    complex<float> c10(-1,0);
+    complex<float> c11(0, 1);
+    complex<float> c12(0, -1);
     std::vector<std::vector<complex<float>>> ArrayG =
     {
-        {c1,c2},
-        {c3,c4}
+        {c1,c2,c3,c4},
+        {c5,c6,c7,c8},
+        {c9,c10,c11,c12}
     };
-
 
 
 
@@ -85,7 +92,7 @@ int main()
     Matrix<int> m_e(3, 3, ArrayE);
     Matrix<int> m_f(3, 3, ArrayF);
 
-    Matrix<complex<float>> m_g(2,2, ArrayG);
+    Matrix<complex<float>> m_g(3,4, ArrayG);
 
     cout << 2 * m_e * 3 * m_f << endl; //Scalar and vector product
 
