@@ -38,12 +38,18 @@ int main()
 
     std::vector<std::vector<double>> ArrayD =
     {
-        {1,-2,1,0},
-        {2,1,-3,5},
-        {4,-7,1,-1}
+        {1,-2,1,1},
+        {1,-2,1,2}, // test: widerspruch zur vorherigen reihe // contradicts with previous line
+        {4,-7,1,-1} // result: returns -nan and -inf as solutions
 
     };
+    std::vector<std::vector<double>> ArrayD2 =
+    {
+        {1,-2,1,1},
+        {1,-2,1,2}, // test: underdefined lgs
 
+
+    };
     std::vector<std::vector<int>> ArrayE =
     {
         {1,1,1},
@@ -103,11 +109,7 @@ int main()
        {fr5, fr6, fr7, fr8},
        {fr9, fr10, fr11, fr12}
    };
-std::vector<std::vector<Fraction>> ArrayH2 = {
-       {fr1, fr2, fr3, fr4},
-       {fr5, fr6, fr7, fr8},
-       {fr9, fr10, fr11, fr12}
-   };
+
 
 
 
@@ -119,6 +121,7 @@ std::vector<std::vector<Fraction>> ArrayH2 = {
 
     Matrix<double> m_c(3, 2, ArrayC);
     Matrix<double> m_d(3, 4, ArrayD);
+    Matrix<double> m_d2(2, 4, ArrayD2);
 
     Matrix<int> m_e(3, 3, ArrayE);
     Matrix<int> m_f(3, 3, ArrayF);
@@ -127,7 +130,7 @@ std::vector<std::vector<Fraction>> ArrayH2 = {
     Matrix<complex<float>> m_g1(3,3, ArrayG);
     Matrix<complex<float>> m_g2(3,3, ArrayG1);
     Matrix<Fraction> m_h(3,4,ArrayH);
-    Matrix<Fraction> m_h2(3,4,ArrayH2);
+    Matrix<Fraction> m_h2(m_h);
   //  m_g1 = m_g1 + m_g;
 
 
@@ -137,10 +140,8 @@ std::vector<std::vector<Fraction>> ArrayH2 = {
     cout << "Matrix B: \n" << m_b <<endl;
     cout << "MatrixA + MatrixB: \n" << m_a + m_b  << endl;
     cout << "MatrixA - MatrixB: \n" << m_a - m_b  << endl;
-    cout << "Matrixa * Matrixb: \n" << m_a * m_b << endl; //Matrix multiplication
-    cout << "MatrixA * 3 \n" << m_a * 3;// Skalar-Multiplication - (matrix<int> m_a * 3)
-    //cout << "MatrixA after changes \n" << m_a << endl;
-    cout << "\n\n";
+    cout << "Matrixa * Matrixb: \n" << m_a * m_b << endl;
+    cout << "MatrixA * 3 \n" << m_a * 3;
     cout << "Matrix C: \n" << m_c <<endl;
     cout << "Matrix D: \n" << m_d <<endl;
 
@@ -151,7 +152,11 @@ std::vector<std::vector<Fraction>> ArrayH2 = {
 
     cout << "fraction matrix:" << endl << m_h * 2 << endl;
 
-    m_d.gauss();
+    m_d.gauss(); // testing for line contradiction
+    // outputs solutions[0] = -nan
+
+    m_d2.gauss(); // testing for underdefined matrix
+    // outputs solutions[0] = -nan
 /*
     Matrix<double> mat(3,4);
     std::cin>>mat;
