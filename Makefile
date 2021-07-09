@@ -27,4 +27,4 @@ clean:
 	rm -f *.o *.zip *.run
 
 zip: clean main
-	zip matrix_manipulation.zip Matrix.h main.cpp Fraction.h Fraction.cpp Makefile 
+	zip matrix_manipulation.zip Matrix.h Matrix.cpp main.cpp Fraction.h Fraction.cpp Makefile 

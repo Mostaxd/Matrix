@@ -46,10 +46,27 @@ int main()
     std::vector<std::vector<double>> ArrayD2 =
     {
         {1,-2,1,1},
-        {1,-2,1,2}, // test: underdefined lgs
+        {1,-2,1,2}, // test: underdefined lgs   expected nan output
 
 
     };
+    std::vector<std::vector<double>> ArrayD3 =
+    {
+        {0,0,0,0},  // test: underdefined lgs   expected nan output
+        {1,-2,1,2},
+        {4,-7,1,-1}
+
+    };
+
+    std::vector<std::vector<double>> ArrayD4 =
+    {
+        {0,0,0,0},  // expected to work nonetheless
+        {1,2,3,10},
+        {1,-2,1,2},
+        {4,-7,1,-1}
+
+    };
+
     std::vector<std::vector<int>> ArrayE =
     {
         {1,1,1},
@@ -120,8 +137,11 @@ int main()
     Matrix<int> m_b(3, 3, ArrayB);
 
     Matrix<double> m_c(3, 2, ArrayC);
+
     Matrix<double> m_d(3, 4, ArrayD);
     Matrix<double> m_d2(2, 4, ArrayD2);
+    Matrix<double> m_d3(3,4, ArrayD3);
+    Matrix<double> m_d4(4,4, ArrayD4);
 
     Matrix<int> m_e(3, 3, ArrayE);
     Matrix<int> m_f(3, 3, ArrayF);
@@ -131,6 +151,7 @@ int main()
     Matrix<complex<float>> m_g2(3,3, ArrayG1);
     Matrix<Fraction> m_h(3,4,ArrayH);
     Matrix<Fraction> m_h2(m_h);
+
   //  m_g1 = m_g1 + m_g;
 
 
@@ -152,14 +173,18 @@ int main()
 
     cout << "fraction matrix:" << endl << m_h * 2 << endl;
 
+    cout << "gauss testing -----------------------------------------" << endl;
     m_d.gauss(); // testing for line contradiction
     // outputs solutions[0] = -nan
-
+    cout << "gauss testing -----------------------------------------" << endl;
     m_d2.gauss(); // testing for underdefined matrix
     // outputs solutions[0] = -nan
-/*
-    Matrix<double> mat(3,4);
-    std::cin>>mat;
-    mat.gauss();
-*/
+    cout << "gauss testing -----------------------------------------" << endl;
+    m_d3.gauss(); // testing for underdefined matrix
+    // outputs solutions[0] = -nan
+    cout << "gauss testing -----------------------------------------" << endl;
+    m_d4.gauss(); // testing for first line filled with zeros and 4 rows
+    // hmm
+
+    return 0;
 }
