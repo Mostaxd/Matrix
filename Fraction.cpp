@@ -151,7 +151,7 @@ Fraction& Fraction::operator*=(int value){
 }
 Fraction& Fraction::operator/=(int value){
     if (value == 0) no_zero_division();
-    denominator/= value;
+    denominator*= value;
     return *this;
 }
 
