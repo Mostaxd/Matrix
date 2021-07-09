@@ -20,9 +20,6 @@ private:
 	int size; // array size
 	T* data; // Element array
 
-
-
-
 public:
 	Matrix(); // Default constructor
 	Matrix(int rows, int cols, T val); // constructor that fills matrix with val
@@ -37,9 +34,9 @@ public:
 	int  getRows() const { return rows; };                 // Get the number of rows
 	int  getSize() const { return rows * cols; };          // Get the size of the array of Matrix
 
-
-
     Matrix<T>& gauss();
+
+	Matrix<T>& operator=(const Matrix<T>& matrix2);
 
 	T& operator()(int row, int col);
 	template  <typename ElemType>
@@ -57,6 +54,7 @@ public:
 	friend std::ostream&            operator <<(std::ostream& os, const Matrix<ElemType>& matrix); // Output matrix to output stream
     template  <typename ElemType>
 	friend std::istream&            operator >>(std::istream& os, const Matrix<ElemType>& matrix); // Output matrix to output stream
+
 
 	//Skalar Funktionen:
 	template  <typename ElemType>
@@ -84,7 +82,6 @@ public:
 template  <typename T>
 Matrix<T>::Matrix()
 {
-	std::cout << "Matrix constructor without paramerters called" << std::endl;
 	cols = 0;
 	rows = 0;
 	size = 0;
@@ -104,11 +101,6 @@ Matrix<T>::Matrix(int rows, int cols, T val)
 		data[i] = val;
 }
 
-
-
-
-
-
 // constructor to generate empty matrix with initializeation.
 template <typename T>
 Matrix<T>::Matrix(int rows, int cols){
@@ -117,7 +109,6 @@ Matrix<T>::Matrix(int rows, int cols){
 	size = cols * rows;
 	data = new T[size];
 }
-
 
 // Constructor: consists of a two-dimensional array  -----   Main Constructor!
 template  <typename T>
@@ -144,7 +135,9 @@ Matrix<T>::Matrix(const Matrix& matrix)
 		data[i] = matrix.data[i];
 }
 
+
 //-----------------------------------------------------------------------------------
+// operators
 
 // Matrix output
 template  <typename ElemType>
@@ -215,6 +208,19 @@ T& Matrix<T>::operator()(int row, int col)
 }
 
 
+// operator = overload (making a copy or saving the result of a calculation to a matrix);
+template < typename T>
+Matrix<T>& Matrix<T>::operator=(const Matrix<T>& matrix2){
+	rows = matrix2.rows;
+	cols = matrix2.cols;
+	size = 0;
+	while (size < matrix2.size ){
+		data[size] = matrix2.data[size];
+		size++;
+	}
+	return *this;
+}
+
 // Operator + overload (matrix addition)
 template  <typename ElemType>
 Matrix<ElemType>  operator+(const Matrix<ElemType>& matrix1, const Matrix<ElemType>& matrix2)
@@ -262,13 +268,7 @@ template  <typename ElemType>
 Matrix<ElemType>  operator*(const Matrix<ElemType>& matrix1, const Matrix<ElemType>& matrix2)
 {
 
-	//Re-FIXED
 	Matrix<ElemType> res(matrix1.rows, matrix2.cols);
-
-	// i used them for debugging
-	// std::cout << "\nresult matrix dimensions:: " << res.rows << " X " << res.cols << std::endl <<std::endl;
-	//	std::cout << "data multiplication: \n" << matrix1 << "\n * \n" << matrix2<< " = " <<std::endl;
-
 
 	 if (matrix1.cols != matrix2.rows) {
 	 	std::cerr << "Fehler:Die Spalten von Matrix1 sind nicht gleich den Zeilen von Matrix2, \

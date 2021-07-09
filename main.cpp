@@ -77,6 +77,7 @@ int main()
         {c9,c10,c11,c12}
     };
 
+
     // testing fractions
    Fraction fr1(6,3);
    fr1.simplify();
@@ -114,6 +115,8 @@ int main()
 
 
     Matrix<complex<float>> m_g(3,4, ArrayG);
+    Matrix<complex<float>> m_g1(m_g);
+    m_g1 = m_g1 + m_g;
     Matrix<Fraction> m_h(3,4,ArrayH);
 
     cout << 2 * m_e * 3 * m_f << endl; //Scalar and vector product
@@ -133,6 +136,7 @@ int main()
     cout << "MatrixD * MatrixC: \n" << m_c * m_d << endl; //Working matrix multiplication
 
     cout << "complex matrixG:" << endl << m_g << endl;
+    cout << "complex matrixG1:" << endl << m_g1 << endl;
     cout << "fraction matrix:" << endl << m_h << endl;
 
     //m_d.gauss();
