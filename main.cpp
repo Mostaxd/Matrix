@@ -72,9 +72,15 @@ int main()
     complex<float> c12(0, -1);
     std::vector<std::vector<complex<float>>> ArrayG =
     {
-        {c1,c2,c3,c4},
-        {c5,c6,c7,c8},
-        {c9,c10,c11,c12}
+        {c1,c2,c3},
+        {c5,c6,c7},
+        {c9,c10,c11}
+    };
+    std::vector<std::vector<complex<float>>> ArrayG1 =
+    {
+        {c1,c2,c3},
+        {c5,c6,c7},
+        {c9,c10,c11}
     };
 
 
@@ -114,35 +120,35 @@ int main()
     Matrix<int> m_f(3, 3, ArrayF);
 
 
-    Matrix<complex<float>> m_g(3,4, ArrayG);
-    Matrix<complex<float>> m_g1(m_g);
-    m_g1 = m_g1 + m_g;
+    Matrix<complex<float>> m_g1(3,3, ArrayG);
+    Matrix<complex<float>> m_g2(3,3, ArrayG1);
     Matrix<Fraction> m_h(3,4,ArrayH);
+  //  m_g1 = m_g1 + m_g;
 
-    cout << 2 * m_e * 3 * m_f << endl; //Scalar and vector product
+
+  //  cout << 2 * m_e * 3 * m_f << endl; //Scalar and vector product
 
     cout << "Matrix A: \n" << m_a <<endl;
     cout << "Matrix B: \n" << m_b <<endl;
     cout << "MatrixA + MatrixB: \n" << m_a + m_b  << endl;
-    cout << "MatrixA after changes \n" << m_b << endl;
     cout << "MatrixA - MatrixB: \n" << m_a - m_b  << endl;
-
-    cout << "MatrixA * 3 \n" << m_a * 3;// Skalar-Multiplication - matrix<int> * int 3 type
+    cout << "Matrixa * Matrixb: \n" << m_a * m_b << endl; //Matrix multiplication
+    cout << "MatrixA * 3 \n" << m_a * 3;// Skalar-Multiplication - (matrix<int> m_a * 3)
+    //cout << "MatrixA after changes \n" << m_a << endl;
     cout << "\n\n";
     cout << "Matrix C: \n" << m_c <<endl;
     cout << "Matrix D: \n" << m_d <<endl;
 
-    cout << "Matrixa * Matrixb: \n" << m_a * m_b << endl; //Working matrix multiplication vector multiplication
-    cout << "MatrixD * MatrixC: \n" << m_c * m_d << endl; //Working matrix multiplication
 
-    cout << "complex matrixG:" << endl << m_g << endl;
     cout << "complex matrixG1:" << endl << m_g1 << endl;
+    cout << "complex matrixG2:" << endl << m_g2 << endl;
+    cout << "complex matrix G1 * G2:" << endl << m_g1 * m_g1 << endl;
     cout << "fraction matrix:" << endl << m_h << endl;
 
-    //m_d.gauss();
-
+    m_d.gauss();
+/*
     Matrix<double> mat(3,4);
     std::cin>>mat;
-
     mat.gauss();
+*/
 }
