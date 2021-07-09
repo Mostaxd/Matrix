@@ -36,7 +36,13 @@ int main()
         {7,8}
     };
 
-    std::vector<std::vector<double>> ArrayD =
+    std::vector<std::vector<double>> ArrayD0 =
+    {
+        {1,-2,1,0},
+        {2,1,-3,5},
+        {4,-7,1,-1}
+    };
+    std::vector<std::vector<double>> ArrayD1 =
     {
         {1,-2,1,1},
         {1,-2,1,2}, // test: widerspruch zur vorherigen reihe // contradicts with previous line
@@ -136,15 +142,13 @@ int main()
     Matrix<int> m_a(3, 3, ArrayA);
     Matrix<int> m_b(3, 3, ArrayB);
 
-    Matrix<double> m_c(3, 2, ArrayC);
 
-    Matrix<double> m_d(3, 4, ArrayD);
+
+    Matrix<double> m_d0(3, 4, ArrayD0);
+    Matrix<double> m_d1(3, 4, ArrayD1);
     Matrix<double> m_d2(2, 4, ArrayD2);
     Matrix<double> m_d3(3,4, ArrayD3);
     Matrix<double> m_d4(4,4, ArrayD4);
-
-    Matrix<int> m_e(3, 3, ArrayE);
-    Matrix<int> m_f(3, 3, ArrayF);
 
 
     Matrix<complex<float>> m_g1(3,3, ArrayG);
@@ -152,40 +156,50 @@ int main()
     Matrix<Fraction> m_h(3,4,ArrayH);
     Matrix<Fraction> m_h2(m_h);
 
-  //  m_g1 = m_g1 + m_g;
 
-
-  //  cout << 2 * m_e * 3 * m_f << endl; //Scalar and vector product
 
     cout << "Matrix A: \n" << m_a <<endl;
     cout << "Matrix B: \n" << m_b <<endl;
-    cout << "MatrixA + MatrixB: \n" << m_a + m_b  << endl;
-    cout << "MatrixA - MatrixB: \n" << m_a - m_b  << endl;
-    cout << "Matrixa * Matrixb: \n" << m_a * m_b << endl;
-    cout << "MatrixA * 3 \n" << m_a * 3;
-    cout << "Matrix C: \n" << m_c <<endl;
-    cout << "Matrix D: \n" << m_d <<endl;
+    cout << "Matrix A + Matrix B: \n" << m_a + m_b  << endl;
+    cout << "Matrix A - Matrix B: \n" << m_a - m_b  << endl;
+    cout << "Matrix A * Matrix B: \n" << m_a * m_b << endl;
+    cout << "Matrix A * 3 \n" << m_a * 3;
 
 
-    cout << "complex matrixG1:" << endl << m_g1 << endl;
-    cout << "complex matrixG2:" << endl << m_g2 << endl;
+
+    cout << "complex matrix G1:" << endl << m_g1 << endl;
+    cout << "complex matrix G2:" << endl << m_g2 << endl;
     cout << "complex matrix G1 * G2:" << endl << m_g1 * m_g1 << endl;
 
     cout << "fraction matrix:" << endl << m_h << endl;
     cout << "fraction matrix * 2:" << endl << m_h * 2 << endl;
 
-    cout << "gauss testing -----------------------------------------" << endl;
-    m_d.gauss(); // testing for line contradiction
+
+    cout << "Matrix with valid answers: \n" ;
+    m_d0.gauss();
+
+    //this part is used for testing
+/*\
+    cout << "\n\ngauss testing -----------------------------------------" << endl;
+    m_d1.gauss(); // testing for line contradiction
     // outputs solutions[0] = -nan
-    cout << "gauss testing -----------------------------------------" << endl;
+    cout << "\n\ngauss testing -----------------------------------------" << endl;
     m_d2.gauss(); // testing for underdefined matrix
     // outputs solutions[0] = -nan
-    cout << "gauss testing -----------------------------------------" << endl;
+    cout << "\n\ngauss testing -----------------------------------------" << endl;
     m_d3.gauss(); // testing for underdefined matrix
     // outputs solutions[0] = -nan
-    cout << "gauss testing -----------------------------------------" << endl;
+    cout << "\n\ngauss testing -----------------------------------------" << endl;
     m_d4.gauss(); // testing for first line filled with zeros and 4 rows
     // hmm
+*/
 
+//Working , but unused functions:
+/*
+Matrix<int> m_e(3, 3, ArrayE);
+Matrix<int> m_f(3, 3, ArrayF);
+m_g1 = m_g1 + m_g2;
+cout << 2 * m_e * 3 * m_f << endl; //Scalar and vector product at the same time
+*/
     return 0;
 }
