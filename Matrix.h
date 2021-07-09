@@ -57,12 +57,12 @@ public:
 
 
 	//Skalar Funktionen:
-	template  <typename ElemType>
-	friend Matrix<ElemType>         operator *(const Matrix<ElemType>& matrix, const ElemType value);       // Matrix and number multiplication * operator overload (1)
-	template  <typename ElemType>
-	friend Matrix<ElemType>         operator *(const ElemType value, const Matrix<ElemType>& matrix);       // Matrix and number multiplication * operator overload (2)
-    template  <typename ElemType>
-	friend Matrix<ElemType>         operator /(const Matrix<ElemType>& matrix, const ElemType value);       // Matrix and number division/operator overload (1)
+	template  <typename ElemType, typename  VALUETYPE>
+	friend Matrix<ElemType>         operator *(const Matrix<ElemType>& matrix, const VALUETYPE value);       // Matrix and number multiplication * operator overload (1)
+	template  <typename ElemType, typename VALUETYPE>
+	friend Matrix<ElemType>         operator *(const VALUETYPE value, const Matrix<ElemType>& matrix);       // Matrix and number multiplication * operator overload (2)
+    template  <typename ElemType, typename VALUETYPE>
+	friend Matrix<ElemType>         operator /(const Matrix<ElemType>& matrix, const VALUETYPE value);       // Matrix and number division/operator overload (1)
 
 };
 
@@ -308,11 +308,11 @@ und können nicht multipliziert werden.(matrix::operator*)" << std::endl;
 
 
 // Operator* overload (Skalar-Multiplizieren) (1)
-template  <typename ElemType>
-Matrix<ElemType>  operator*(const Matrix<ElemType>& matrix, const ElemType value)
-{   float res = static_cast<double>(value);
+template  <typename ElemType, typename VALUETYPE>
+Matrix<ElemType>  operator*(const Matrix<ElemType>& matrix, const VALUETYPE value)
+{
 	for (int i = 0; i < matrix.size; i++)
-		matrix.data[i] *= res;
+		matrix.data[i] *= value;
 	return matrix;
 }
 // Operator* overload (Skalar-Multiplizieren) (2)
@@ -324,11 +324,11 @@ Matrix<ElemType>  operator*(const ElemType value, const Matrix<ElemType>& matrix
 
 
 // Operator/ overload (Matrix division by number)
-template  <typename ElemType>
-Matrix<ElemType>  operator/(const Matrix<ElemType>& matrix, const ElemType value)
-{   float res = static_cast<double>(value);
+template  <typename ElemType, typename VALUETYPE>
+Matrix<ElemType>  operator/(const Matrix<ElemType>& matrix, const VALUETYPE value)
+{
 	for (int i = 0; i < matrix.size; i++)
-		matrix.data[i] /= res;
+		matrix.data[i] /= value;
 	return matrix;
 }
 
