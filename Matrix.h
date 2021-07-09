@@ -21,11 +21,13 @@ private:
 	T* data; // Element array
 
 
+
+
 public:
 	Matrix(); // Default constructor
-	Matrix(int rows_, int cols_, T val); // constructor that fills matrix with val
-	Matrix(int rows_, int cols_);	//empty constructor initialized with 0
-	Matrix(int rows_, int cols_, const vector<vector<T>>& Array); // A Two-dimensional array to construct a matrix
+	Matrix(int rows, int cols, T val); // constructor that fills matrix with val
+	Matrix(int rows, int cols);	//empty constructor initialized with 0
+	Matrix(int rows, int cols, const vector<vector<T>>& Array); // A Two-dimensional array to construct a matrix
 	Matrix(const Matrix& matrix);                      // Use an existing matrix object to construct a matrix
 
 	~Matrix() { delete[]data; }; //deconstructor (deletes arrays after usage, manually emptying heap memory)
@@ -41,29 +43,41 @@ public:
 
 	T& operator()(int row, int col);
 	template  <typename ElemType>
-	friend Matrix<ElemType>   operator +(const Matrix<ElemType>& matrix1, const Matrix<ElemType>& matrix2); // Matrix and matrix addition (+ operator overload)
+	friend Matrix<ElemType>          operator +(const Matrix<ElemType>& matrix1, const Matrix<ElemType>& matrix2); // Matrix and matrix addition (+ operator overload)
 	template  <typename ElemType>
-	friend Matrix<ElemType>   operator -(const Matrix<ElemType>& matrix1, const Matrix<ElemType>& matrix2); // Matrix and matrix subtraction(-operator overloading)
+	friend Matrix<ElemType>          operator -(const Matrix<ElemType>& matrix1, const Matrix<ElemType>& matrix2); // Matrix and matrix subtraction(-operator overloading)
 	template  <typename ElemType>
-	friend Matrix<ElemType>   operator *(const Matrix<ElemType>& matrix1, const Matrix<ElemType>& matrix2); // Matrix and matrix multiplication (* operator overload)
+	friend Matrix<ElemType>          operator *(const Matrix<ElemType>& matrix1, const Matrix<ElemType>& matrix2); // Matrix and matrix multiplication (* operator overload)
 
 
 	// stream operators
 	template <typename COMPLEXTYPE>
-	friend std::ostream& operator <<(std::ostream& os, const Matrix<complex<COMPLEXTYPE>>& matrix);
+	friend std::ostream&            operator <<(std::ostream& os, const Matrix<complex<COMPLEXTYPE>>& matrix); // Output matrix of type Complex to output stream
 	template  <typename ElemType>
+<<<<<<< HEAD
 	friend std::ostream& operator <<(std::ostream& os, const Matrix<ElemType>& matrix); // Output matrix to output stream
     template  <typename ElemType>
 	friend std::istream& operator >>(std::istream& os, const Matrix<ElemType>& matrix); // Output matrix to output stream
+=======
+	friend std::ostream&            operator <<(std::ostream& os, const Matrix<ElemType>& matrix); // Output matrix to output stream
+    template  <typename ElemType>
+	friend std::istream&            operator >>(std::istream& os, const Matrix<ElemType>& matrix); // Output matrix to output stream
+>>>>>>> defcb6fc27c0d0c76d6531a47697fbf637fdca9f
 
 	//Skalar Funktionen:
 	template  <typename ElemType>
-	friend Matrix<ElemType>   operator *(const Matrix<ElemType>& matrix, const ElemType value);       // Matrix and number multiplication * operator overload (1)
+	friend Matrix<ElemType>         operator *(const Matrix<ElemType>& matrix, const ElemType value);       // Matrix and number multiplication * operator overload (1)
 	template  <typename ElemType>
+<<<<<<< HEAD
 	friend Matrix<ElemType>   operator *(const ElemType value, const Matrix<ElemType>& matrix);       // Matrix and number multiplication * operator overload (2)
 
 
 	Matrix<T>&   operator/(const T value);       // Matrix and number division/operator overload (1)
+=======
+	friend Matrix<ElemType>         operator *(const ElemType value, const Matrix<ElemType>& matrix);       // Matrix and number multiplication * operator overload (2)
+    template  <typename ElemType>
+	friend Matrix<ElemType>         operator /(const Matrix<ElemType>& matrix, const ElemType value);       // Matrix and number division/operator overload (1)
+>>>>>>> defcb6fc27c0d0c76d6531a47697fbf637fdca9f
 
 };
 
@@ -120,10 +134,10 @@ Matrix<T>::Matrix(int rows, int cols){
 
 // Constructor: consists of a two-dimensional array  -----   Main Constructor!
 template  <typename T>
-Matrix<T>::Matrix(int rows_, int cols_, const vector<vector<T>>& Array)
+Matrix<T>::Matrix(int rows, int cols, const vector<vector<T>>& Array)
 {
-	cols = cols_;
-	rows = rows_;
+	this -> cols = cols;
+	this -> rows = rows;
 	size = cols * rows;
 	data = new T[size];
 	for (int i = 0; i < cols; i++)
@@ -160,6 +174,25 @@ std::ostream& operator<<(std::ostream& os, const Matrix<ElemType>& matrix)
 		os << ";" << std::endl;
 	}
 	return os;
+}
+// Matrix output
+template  <typename ElemType>
+std::istream& operator>>(std::istream& is, const Matrix<ElemType>& matrix)
+{
+    std::cout << "Enter the elements of the " << matrix.rows << "X" <<matrix.cols << " matrix: \n";
+	for (int i = 0; i < matrix.rows; i++)
+	{
+		for (int j = 0; j < matrix.cols; j++)
+		{   std::cout << "[" <<i<<"]"<<"["<<j<<"] : ";
+			is >> matrix.data[j * matrix.rows + i] ;
+			//if (j != matrix.cols - 1 )
+				//std::cout << " , " ;
+		}
+		std::cout << "\t;\n";
+	}
+	std::cout << "The matrix " << matrix.rows << "X" <<matrix.cols << " is: \n";
+	std::cout << matrix;
+	return is;
 }
 
 
@@ -325,18 +358,18 @@ Matrix<ElemType>  operator*(const ElemType value, const Matrix<ElemType>& matrix
 
 
 // Operator/ overload (Matrix division by number)
-template  <typename T>
-Matrix<T>& Matrix<T>::operator/(const T value)
-{
-	for (int i = 0; i < size; i++)
-		data[i] /= value;
-	return this;
+template  <typename ElemType>
+Matrix<ElemType>  operator/(const Matrix<ElemType>& matrix, const ElemType value)
+{   float res = static_cast<double>(value);
+	for (int i = 0; i < matrix.size; i++)
+		matrix.data[i] /= res;
+	return matrix;
 }
 
 template <typename T>
 Matrix<T>& Matrix<T>::gauss()
 {
-    std::cout<< "initial matrix: \n";
+    std::cout<< "Matrix: \n";
     std::cout << *this;
 
     int n,i,j,k;
@@ -356,27 +389,27 @@ Matrix<T>& Matrix<T>::gauss()
                     mat(i,j)=mat (k,j);
                     mat(k,j)=temp;
                 }
-    std::cout<<"\nThe matrix after Pivotisation is:\n";
+    std::cout<<"\nDie Matrix nach der Pivotisierung ist:\n";
     std::cout << mat;
-    for (i=0;i<n-1;i++)            //loop to perform the gauss elimination
+    for (i=0;i<n-1;i++)            //do gauss elimination
         for (k=i+1;k<n;k++)
             {
                 double t=mat(k,i)/mat(i,i);
                 for (j=0;j<=n;j++)
-                    mat(k,j)=mat(k,j)-t*mat(i,j);    //make the elements below the pivot elements equal to zero or elimnate the variables
+                    mat(k,j)=mat(k,j)-t*mat(i,j);    //elimnate variables that are under pivot
             }
-             std::cout<<"\n\nThe matrix after gauss-elimination is as follows:\n";
+             std::cout<<"\n\nThe matrix after gauss-elimination is:\n";
     std::cout << mat;
     float lsg[n];
     for (i=n-1;i>=0;i--)                //back-substitution
-    {                        //x is an array whose values correspond to the values of x,y,z..
+    {                        //lsg is an array whose values correspond to the values of x[1],x[2],x[3]..
         lsg[i] = mat(i,n);                //make the variable to be calculated equal to the rhs of the last equation
         for (j=i+1;j<n;j++)
             if (j!=i)            //then subtract all the lhs values except the coefficient of the variable whose value                                   is being calculated
                 lsg[i]=lsg[i]-mat(i,j)*lsg[j];
         lsg[i]=lsg[i]/mat(i,i);            //now finally divide the rhs by the coefficient of the variable to be calculated
     }
-    std::cout<<"\nThe values of the variables are as follows:\n";
+    std::cout<<"\nDie Werte der Variablen sind:\n";
     for (i=0;i<n;i++)
     {
         std::cout<<"x["<<i<<"] = " << lsg[i]<<std::endl;
