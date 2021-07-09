@@ -140,14 +140,5 @@ int main()
     Matrix<double> mat(3,4);
     std::cin>>mat;
 
-<<<<<<< HEAD
     mat.gauss();
-=======
-    //m_d.gauss();
-    
-   Matrix<double> mat(3,4);
-   std::cin>>mat;
-
-   mat.gauss();
->>>>>>> defcb6fc27c0d0c76d6531a47697fbf637fdca9f
 }

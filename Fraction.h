@@ -37,13 +37,5 @@ public:
 
 };
 
-// put abs overload here instead of Fraction.cpp cause it needs to run in Matrix.h
-// and i don't want to spend time on thinkink about why i can't
-Fraction& abs(Fraction& fr){
-    fr.numerator = abs(fr.numerator);
-    fr.denominator = abs(fr.denominator);
-    return fr;
-}
-
 
 #endif

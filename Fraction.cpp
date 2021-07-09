@@ -145,3 +145,9 @@ Fraction& Fraction::simplify(){
     denominator /= divisor;
     return *this;
 }
+
+Fraction& abs(Fraction& fr){
+    fr.numerator = abs(fr.numerator);
+    fr.denominator = abs(fr.denominator);
+    return fr;
+}
