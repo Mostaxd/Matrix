@@ -54,30 +54,17 @@ public:
 	template <typename COMPLEXTYPE>
 	friend std::ostream&            operator <<(std::ostream& os, const Matrix<complex<COMPLEXTYPE>>& matrix); // Output matrix of type Complex to output stream
 	template  <typename ElemType>
-<<<<<<< HEAD
-	friend std::ostream& operator <<(std::ostream& os, const Matrix<ElemType>& matrix); // Output matrix to output stream
-    template  <typename ElemType>
-	friend std::istream& operator >>(std::istream& os, const Matrix<ElemType>& matrix); // Output matrix to output stream
-=======
 	friend std::ostream&            operator <<(std::ostream& os, const Matrix<ElemType>& matrix); // Output matrix to output stream
     template  <typename ElemType>
 	friend std::istream&            operator >>(std::istream& os, const Matrix<ElemType>& matrix); // Output matrix to output stream
->>>>>>> defcb6fc27c0d0c76d6531a47697fbf637fdca9f
 
 	//Skalar Funktionen:
 	template  <typename ElemType>
 	friend Matrix<ElemType>         operator *(const Matrix<ElemType>& matrix, const ElemType value);       // Matrix and number multiplication * operator overload (1)
 	template  <typename ElemType>
-<<<<<<< HEAD
-	friend Matrix<ElemType>   operator *(const ElemType value, const Matrix<ElemType>& matrix);       // Matrix and number multiplication * operator overload (2)
-
-
-	Matrix<T>&   operator/(const T value);       // Matrix and number division/operator overload (1)
-=======
 	friend Matrix<ElemType>         operator *(const ElemType value, const Matrix<ElemType>& matrix);       // Matrix and number multiplication * operator overload (2)
     template  <typename ElemType>
 	friend Matrix<ElemType>         operator /(const Matrix<ElemType>& matrix, const ElemType value);       // Matrix and number division/operator overload (1)
->>>>>>> defcb6fc27c0d0c76d6531a47697fbf637fdca9f
 
 };
 
@@ -175,27 +162,6 @@ std::ostream& operator<<(std::ostream& os, const Matrix<ElemType>& matrix)
 	}
 	return os;
 }
-// Matrix output
-template  <typename ElemType>
-std::istream& operator>>(std::istream& is, const Matrix<ElemType>& matrix)
-{
-    std::cout << "Enter the elements of the " << matrix.rows << "X" <<matrix.cols << " matrix: \n";
-	for (int i = 0; i < matrix.rows; i++)
-	{
-		for (int j = 0; j < matrix.cols; j++)
-		{   std::cout << "[" <<i<<"]"<<"["<<j<<"] : ";
-			is >> matrix.data[j * matrix.rows + i] ;
-			//if (j != matrix.cols - 1 )
-				//std::cout << " , " ;
-		}
-		std::cout << "\t;\n";
-	}
-	std::cout << "The matrix " << matrix.rows << "X" <<matrix.cols << " is: \n";
-	std::cout << matrix;
-	return is;
-}
-
-
 // Matrix output
 template  <typename ElemType>
 std::istream& operator>>(std::istream& is, const Matrix<ElemType>& matrix)
