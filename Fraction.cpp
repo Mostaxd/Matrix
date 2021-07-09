@@ -135,6 +135,53 @@ Fraction Fraction::operator/(Fraction fr2){
 }
 
 
+Fraction& Fraction::operator+=(int value){
+    numerator += (denominator * value);
+    return *this;
+}
+
+Fraction& Fraction::operator-=(int value){
+    numerator -= (denominator * value);
+    return *this;
+}
+
+Fraction& Fraction::operator*=(int value){
+    numerator *= value;
+    return *this;
+}
+Fraction& Fraction::operator/=(int value){
+    if (value == 0) no_zero_division();
+    denominator/= value;
+    return *this;
+}
+
+
+Fraction Fraction::operator+(int value){
+    // this stays untouched!
+    Fraction fr = *this;
+    fr += value;
+    return fr;
+}
+
+Fraction Fraction::operator-(int value){
+    // this stays untouched!
+    Fraction fr = *this;
+    fr -= value;
+    return fr;
+}
+
+Fraction Fraction::operator*(int value){
+    // this stays untouched!
+    Fraction fr = *this;
+    fr *= value;
+    return fr;
+}
+Fraction Fraction::operator/(int value){
+    // this stays untouched!
+    Fraction fr = *this;
+    fr /= value;
+    return fr;
+}
 // other public members
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -146,6 +193,9 @@ Fraction& Fraction::simplify(){
     return *this;
 }
 
+
+
+// abs overload to return absolute value of fraction
 Fraction& abs(Fraction& fr){
     fr.numerator = abs(fr.numerator);
     fr.denominator = abs(fr.denominator);

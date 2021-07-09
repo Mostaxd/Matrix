@@ -31,6 +31,15 @@ public:
     Fraction operator*(Fraction fr2);
     Fraction operator/(Fraction fr2);
 
+    Fraction& operator+=(int value);
+    Fraction& operator-=(int value);
+    Fraction& operator*=(int value);
+    Fraction& operator/=(int value);
+
+    Fraction operator+(int value);
+    Fraction operator-(int value);
+    Fraction operator*(int value);
+    Fraction operator/(int value);
 
     Fraction& simplify();
 
