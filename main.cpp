@@ -61,11 +61,11 @@ int main()
     complex<float> c1(2.5, 5.2);
     complex<float> c2(22.2, -2);
     complex<float> c3(-1.125,3.8);
-    complex<float> c4(-1.25, -1.25);
+   // complex<float> c4(-1.25, -1.25);
     complex<float> c5(12, 2);
     complex<float> c6(-2, 4);
     complex<float> c7(1, 0);
-    complex<float> c8(6, -1);;
+   // complex<float> c8(6, -1);;
     complex<float> c9(1,1);
     complex<float> c10(-1,0);
     complex<float> c11(0, 1);
@@ -94,20 +94,20 @@ int main()
    Fraction fr6(3,2);
    Fraction fr7(9,2);
    Fraction fr8(1,4);
-   cout << "fraction 8 * 2 = " << fr8 * 2 << endl;
    Fraction fr9(3,4);
    Fraction fr10(1,8);
    Fraction fr11(-2);
    Fraction fr12(2);
-
    std::vector<std::vector<Fraction>> ArrayH = {
-       {fr1, fr2, fr3},
-       {fr5, fr6, fr7},
-       {fr9, fr10, fr11}
+       {fr1, fr2, fr3, fr4},
+       {fr5, fr6, fr7, fr8},
+       {fr9, fr10, fr11, fr12}
    };
-
-
-
+std::vector<std::vector<Fraction>> ArrayH2 = {
+       {fr1, fr2, fr3, fr4},
+       {fr5, fr6, fr7, fr8},
+       {fr9, fr10, fr11, fr12}
+   };
 
 
 
@@ -126,9 +126,8 @@ int main()
 
     Matrix<complex<float>> m_g1(3,3, ArrayG);
     Matrix<complex<float>> m_g2(3,3, ArrayG1);
-
-    Matrix<Fraction> m_h(3,3,ArrayH);
-    Matrix<Fraction> m_h2(m_h);
+    Matrix<Fraction> m_h(3,4,ArrayH);
+    Matrix<Fraction> m_h2(3,4,ArrayH2);
   //  m_g1 = m_g1 + m_g;
 
 
@@ -150,8 +149,7 @@ int main()
     cout << "complex matrixG2:" << endl << m_g2 << endl;
     cout << "complex matrix G1 * G2:" << endl << m_g1 * m_g1 << endl;
 
-    cout << "fraction matrix1:" << endl << m_h << endl;
-    cout << "fraction matrix1 * matrix1 " << endl <<  m_h * m_h << endl;
+    cout << "fraction matrix:" << endl << m_h * 2 << endl;
 
     m_d.gauss();
 /*
