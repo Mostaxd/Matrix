@@ -364,7 +364,7 @@ Matrix<T>& Matrix<T>::gauss()
                 for (j=0;j<=n;j++)
                     mat(k,j)=mat(k,j)-t*mat(i,j);    //elimnate variables that are under pivot
             }
-             std::cout<<"\n\nThe matrix after gauss-elimination is:\n";
+             std::cout<<"\n\nDie Matrix nach Gauss-Eliminierung is:\n";
     std::cout << mat;
     float lsg[n];
     for (i=n-1;i>=0;i--)                //back-substitution
