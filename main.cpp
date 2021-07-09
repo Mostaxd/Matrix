@@ -61,9 +61,9 @@ int main()
     std::vector<std::vector<double>> ArrayD4 =
     {
         {0,0,0,0},  // expected to work nonetheless
-        {1,2,3,10},
-        {1,-2,1,2},
-        {4,-7,1,-1}
+        {9,3,4,7},
+        {4,3,4,8},
+        {1,1,1,3  }
 
     };
 
@@ -171,7 +171,8 @@ int main()
     cout << "complex matrixG2:" << endl << m_g2 << endl;
     cout << "complex matrix G1 * G2:" << endl << m_g1 * m_g1 << endl;
 
-    cout << "fraction matrix:" << endl << m_h * 2 << endl;
+    cout << "fraction matrix:" << endl << m_h << endl;
+    cout << "fraction matrix * 2:" << endl << m_h * 2 << endl;
 
     cout << "gauss testing -----------------------------------------" << endl;
     m_d.gauss(); // testing for line contradiction
