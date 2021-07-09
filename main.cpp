@@ -99,10 +99,12 @@ int main()
    Fraction fr11(-2);
    Fraction fr12(2);
    std::vector<std::vector<Fraction>> ArrayH = {
-       {fr1, fr2, fr3, fr4},
-       {fr5, fr6, fr7, fr8},
-       {fr9, fr10, fr11, fr12}
+       {fr1, fr2, fr3},
+       {fr5, fr6, fr7},
+       {fr9, fr10, fr11}
    };
+
+
 
 
 
@@ -122,7 +124,9 @@ int main()
 
     Matrix<complex<float>> m_g1(3,3, ArrayG);
     Matrix<complex<float>> m_g2(3,3, ArrayG1);
-    Matrix<Fraction> m_h(3,4,ArrayH);
+
+    Matrix<Fraction> m_h(3,3,ArrayH);
+    Matrix<Fraction> m_h2(m_h);
   //  m_g1 = m_g1 + m_g;
 
 
@@ -143,7 +147,9 @@ int main()
     cout << "complex matrixG1:" << endl << m_g1 << endl;
     cout << "complex matrixG2:" << endl << m_g2 << endl;
     cout << "complex matrix G1 * G2:" << endl << m_g1 * m_g1 << endl;
-    cout << "fraction matrix:" << endl << m_h << endl;
+
+    cout << "fraction matrix1:" << endl << m_h << endl;
+    cout << "fraction matrix1 + matrix1:" << endl << m_h + m_h2 << endl;
 
     m_d.gauss();
 /*
