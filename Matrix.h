@@ -35,10 +35,8 @@ public:
 	int  getRows() const { return rows; };                 // Get the number of rows
 	int  getSize() const { return rows * cols; };          // Get the size of the array of Matrix
 
-	// we don't need those no more i suppose
-	// Matrix<T> gaussian_elemination();
-	// Matrix<T>& substitute();
-	// Matrix<T> solve();
+
+
     Matrix<T>& gauss();
 
 	T& operator()(int row, int col);
@@ -55,7 +53,8 @@ public:
 	friend std::ostream& operator <<(std::ostream& os, const Matrix<complex<COMPLEXTYPE>>& matrix);
 	template  <typename ElemType>
 	friend std::ostream& operator <<(std::ostream& os, const Matrix<ElemType>& matrix); // Output matrix to output stream
-
+    template  <typename ElemType>
+	friend std::istream& operator >>(std::istream& os, const Matrix<ElemType>& matrix); // Output matrix to output stream
 
 	//Skalar Funktionen:
 	template  <typename ElemType>
@@ -63,13 +62,9 @@ public:
 	template  <typename ElemType>
 	friend Matrix<ElemType>   operator *(const ElemType value, const Matrix<ElemType>& matrix);       // Matrix and number multiplication * operator overload (2)
 
-	//much much cleaner and easyer to read -- this bugged me a long time
-	// we need to simplify every operator overload like this!
+
 	Matrix<T>&   operator/(const T value);       // Matrix and number division/operator overload (1)
-	// template  <typename ElemType>
-	// friend Matrix<ElemType>   operator +(const Matrix<ElemType>& matrix, const ElemType value);       // Matrix and number addition + operator overloading (1)
-	// template  <typename ElemType>
-	// friend Matrix<ElemType>   operator -(const Matrix<ElemType>& matrix, const ElemType value);       // Matrix and number addition + operator overloading (1)
+
 };
 
 
@@ -165,6 +160,27 @@ std::ostream& operator<<(std::ostream& os, const Matrix<ElemType>& matrix)
 		os << ";" << std::endl;
 	}
 	return os;
+}
+
+
+// Matrix output
+template  <typename ElemType>
+std::istream& operator>>(std::istream& is, const Matrix<ElemType>& matrix)
+{
+    std::cout << "Enter the elements of the " << matrix.rows << "X" <<matrix.cols << " matrix: \n";
+	for (int i = 0; i < matrix.rows; i++)
+	{
+		for (int j = 0; j < matrix.cols; j++)
+		{   std::cout << "[" <<i<<"]"<<"["<<j<<"] : ";
+			is >> matrix.data[j * matrix.rows + i] ;
+			//if (j != matrix.cols - 1 )
+				//std::cout << " , " ;
+		}
+		std::cout << "\t;\n";
+	}
+	std::cout << "The matrix " << matrix.rows << "X" <<matrix.cols << " is: \n";
+	std::cout << matrix;
+	return is;
 }
 
 
@@ -290,19 +306,7 @@ und können nicht multipliziert werden.(matrix::operator*)" << std::endl;
 
 
 
-// this is adding the same scalar to every element in a matrix
-// which is not adding an adding a scalar to a matrix operation
-// to do that you would need to multiply a identity matrix with the scalar and then do matrix + matrix addition
-// which would only permit adding a scalar to square matrices
-// nevertheless i strongly think this wasn't requested and we shouldn't implement it
-// // Operator+ overload (Skalar-Addieren)
-// template  <typename ElemType>
-// Matrix<ElemType>  operator+(const Matrix<ElemType>& matrix, const ElemType value)
-// {   float res = static_cast<double>(value);
-// 	for (int i = 0; i < matrix.size; i++)
-// 		matrix.data[i] += res;
-// 	return matrix;
-// }
+
 
 // Operator* overload (Skalar-Multiplizieren) (1)
 template  <typename ElemType>
@@ -375,7 +379,7 @@ Matrix<T>& Matrix<T>::gauss()
     std::cout<<"\nThe values of the variables are as follows:\n";
     for (i=0;i<n;i++)
     {
-        std::cout<<lsg[i]<<std::endl;
+        std::cout<<"x["<<i<<"] = " << lsg[i]<<std::endl;
     }
 
 
